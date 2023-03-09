@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 
 	"rachadinha/internal/entity"
-	"rachadinha/internal/service"
+	service "rachadinha/internal/middleware"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
