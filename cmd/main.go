@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"encoding/json"
-	config "rachadinha/internal/configuration"
+
 	"rachadinha/internal/entity"
+	"rachadinha/internal/service"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -16,12 +17,19 @@ type Response = events.APIGatewayProxyResponse
 
 func handler(ctx context.Context, r Request) (Response, error) {
 
-	db := config.Conectar()
-	var grupo []entity.Grupo
+	var grupos []entity.Grupo
+	service.RecuperarGrupos(&grupos)
 
-	db.Preload("Usuario").Find(&grupo)
+	var usuarioDoMes entity.Usuario
+	var proximoSequencial int
 
-	json, _ := json.Marshal(grupo)
+	for _, grupo := range grupos {
+		usuarioDoMes, proximoSequencial = service.RecuperarUsuarioDoMes(&grupo)
+		grupo.SquencialAtual = proximoSequencial
+		service.SalvarGrupo(&grupo)
+	}
+
+	json, _ := json.Marshal(usuarioDoMes)
 	var resp Response
 	resp.Body = string(json)
 	resp.StatusCode = 200

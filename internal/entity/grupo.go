@@ -1,9 +1,10 @@
 package entity
 
 type Grupo struct {
-	ID      int
-	Nome    string
-	Usuario []*Usuario `gorm:"many2many:prd.tb_grupo_usuario;"`
+	ID             int
+	Nome           string
+	SquencialAtual int `gorm:"column:sequencial_atual"`
+	GrupoUsuario   []*GrupoUsuario
 }
 
 func (u *Grupo) TableName() string {
