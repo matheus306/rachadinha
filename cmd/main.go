@@ -26,6 +26,7 @@ func handler(ctx context.Context, r Request) (Response, error) {
 	for _, grupo := range grupos {
 		usuarioDoMes, proximoSequencial = service.RecuperarUsuarioDoMes(&grupo)
 		grupo.SquencialAtual = proximoSequencial
+		service.EnviarEmail(&usuarioDoMes)
 		service.SalvarGrupo(&grupo)
 	}
 
